@@ -1,3 +1,8 @@
+.wrapper {
+  position: relative;
+  left: 10px;
+}
+
 .filterButton {
   font-style: normal;
   font-weight: 400;
@@ -31,8 +36,7 @@
   background-color: #313131;
   border-radius: 12px;
   padding: 34px;
-  top: 288px;
-  left: 456px;
+  top: 45px;
 }
 
 .activeFilter {

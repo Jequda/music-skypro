@@ -7,13 +7,13 @@ import Search from "@/components/Search/Search";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import Bar from "@/components/Bar/Bar";
 import Image from "next/image";
-import Link from "next/link";
 
 type ErrorType = {
-  error: unknown;
+  error: Error;
+  reset: () => void;
 };
 
-export default function Error({ error }: ErrorType) {
+export default function Error({ error, reset }: ErrorType) {
   useEffect(() => {
     // Логирование ошибки
     console.error(error);
@@ -39,10 +39,8 @@ export default function Error({ error }: ErrorType) {
             <div className={styles.errorShadedText}>
               Возможно, она была удалена <br /> или перенесена на другой адрес
             </div>
-            <button className={styles.errorButton}>
-              <Link className={styles.errorButtonText} href="/">
-                Вернуться на главную
-              </Link>
+            <button onClick={reset} className={styles.errorButton}>
+              Вернуться на главную
             </button>
           </div>
           <Sidebar></Sidebar>
