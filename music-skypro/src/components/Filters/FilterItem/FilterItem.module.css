@@ -1,0 +1,72 @@
+.wrapper {
+  position: relative;
+  left: 10px;
+}
+
+.filterButton {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  border: 1px solid #ffffff;
+  border-radius: 60px;
+  padding: 6px 20px;
+}
+
+.filterButton:not(:last-child) {
+  margin-right: 10px;
+}
+
+.BtnText:hover {
+  border-color: #d9b6ff;
+  color: #d9b6ff;
+  cursor: pointer;
+}
+
+.active {
+  border-color: #ad61ff;
+  color: #ad61ff;
+  cursor: pointer;
+}
+
+.activeFilterContainer {
+  position: absolute;
+  width: 248px;
+  height: 305px;
+  background-color: #313131;
+  border-radius: 12px;
+  padding: 34px;
+  top: 45px;
+}
+
+.activeFilter {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  font-family: StratosSkyeng;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0%;
+  text-align: left;
+  height: 237px;
+  overflow-y: auto;
+}
+
+.activeFilter li:hover {
+  color: #b672ff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.activeFilter.activeFilter::-webkit-scrollbar {
+  width: 4px;
+}
+
+.activeFilter.activeFilter::-webkit-scrollbar-track {
+  background-color: #4b4949;
+}
+
+.activeFilter.activeFilter::-webkit-scrollbar-thumb {
+  background-color: white;
+}

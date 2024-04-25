@@ -1,6 +1,12 @@
 import styles from "./Track.module.css";
 
-export default function Track() {
+type TrackType = {
+  name: string;
+  autor: string;
+  album: string;
+};
+
+export default function Track({ name, autor, album }: TrackType) {
   return (
     <div className={styles.playlistItem}>
       <div className={styles.playlistTrack}>
@@ -12,18 +18,18 @@ export default function Track() {
           </div>
           <div className="track__title-text">
             <a className={styles.trackTitleLink} href="/">
-              Guilt <span className={styles.trackTitleSpan} />
+              {name} <span className={styles.trackTitleSpan} />
             </a>
           </div>
         </div>
         <div className={styles.trackAuthor}>
           <a className={styles.trackAuthorLink} href="/">
-            Nero
+            {autor}
           </a>
         </div>
         <div className={styles.trackAlbum}>
           <a className={styles.trackAlbumLink} href="/">
-            Welcome Reality
+            {album}
           </a>
         </div>
         <div className="track__time">
