@@ -2,13 +2,14 @@ import styles from "./Track.module.css";
 
 type TrackType = {
   name: string;
-  autor: string;
+  author: string;
   album: string;
+  onClick: () => void;
 };
 
-export default function Track({ name, autor, album }: TrackType) {
+export default function Track({ name, author, album, onClick }: TrackType) {
   return (
-    <div className={styles.playlistItem}>
+    <div onClick={onClick} className={styles.playlistItem}>
       <div className={styles.playlistTrack}>
         <div className={styles.trackTitle}>
           <div className={styles.trackTitleImage}>
@@ -17,20 +18,16 @@ export default function Track({ name, autor, album }: TrackType) {
             </svg>
           </div>
           <div className="track__title-text">
-            <a className={styles.trackTitleLink} href="/">
+            <span className={styles.trackTitleLink}>
               {name} <span className={styles.trackTitleSpan} />
-            </a>
+            </span>
           </div>
         </div>
         <div className={styles.trackAuthor}>
-          <a className={styles.trackAuthorLink} href="/">
-            {autor}
-          </a>
+          <span className={styles.trackAuthorLink}>{author}</span>
         </div>
         <div className={styles.trackAlbum}>
-          <a className={styles.trackAlbumLink} href="/">
-            {album}
-          </a>
+          <span className={styles.trackAlbumLink}>{album}</span>
         </div>
         <div className="track__time">
           <svg className={styles.trackTimeSvg}>
