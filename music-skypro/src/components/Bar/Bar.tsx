@@ -55,6 +55,8 @@ export default function Bar({ track }: BarType) {
     );
     if (audioRef.current) {
       audioRef.current.volume = volume;
+      audioRef.current.autoplay = true;
+      setIsPlaying(true);
     }
   }, [volume]);
 
