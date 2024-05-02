@@ -5,6 +5,7 @@ import styles from "./Bar.module.css";
 import { trackType } from "@/types";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import classNames from "classnames";
+import { durationFormat } from "@/utills/durationFormat";
 
 type BarType = {
   track: trackType;
@@ -76,9 +77,9 @@ export default function Bar({ track }: BarType) {
             onChange={handleSeek}
           />
           <div>
-            {Math.floor(currentTime / 60)} : {Math.floor(currentTime % 60)}
+            {durationFormat(currentTime)}
             &nbsp; / &nbsp;
-            {Math.floor(duration / 60)} : {Math.floor(duration % 60)}
+            {durationFormat(duration)}
           </div>
         </div>
         <div className={styles.barPlayerBlock}>
