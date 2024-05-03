@@ -83,9 +83,7 @@ export default function Bar({ track }: BarType) {
           <div>
             {durationFormat(currentTime)}
             &nbsp; / &nbsp;
-            {durationFormat(duration) !== null
-              ? durationFormat(duration)
-              : "0 : 00"}
+            {durationFormat(duration)}
           </div>
         </div>
         <div className={styles.barPlayerBlock}>
