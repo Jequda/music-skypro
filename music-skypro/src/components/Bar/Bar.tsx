@@ -17,8 +17,12 @@ export default function Bar({ track }: BarType) {
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isShuffle, setIsShuffle] = useState<boolean>(false);
+  let duration = 0;
 
-  const duration = audioRef.current?.duration;
+  if (audioRef.current?.duration) {
+    duration = audioRef.current?.duration;
+  }
+
   const [volume, setVolume] = useState<number>(0.5); // Начальная громкость установлена на 50%
 
   const togglePlay = () => {
@@ -79,7 +83,9 @@ export default function Bar({ track }: BarType) {
           <div>
             {durationFormat(currentTime)}
             &nbsp; / &nbsp;
-            {durationFormat(duration)}
+            {durationFormat(duration) !== null
+              ? durationFormat(duration)
+              : "0 : 00"}
           </div>
         </div>
         <div className={styles.barPlayerBlock}>
