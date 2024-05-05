@@ -16,6 +16,11 @@
   flex-direction: column;
 }
 
+.progressBarContainer {
+  display: flex;
+  flex-direction: row;
+}
+
 .barPlayerProgress {
   width: 100%;
   height: 5px;
@@ -86,6 +91,21 @@
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.playerBtnPrevSvg:hover,
+.playerBtnPlaySvg:hover,
+.playerBtnNextSvg:hover {
+  stroke: #696969;
+}
+
+.playerBtnRepeatSvg:hover,
+.playerBtnShuffleSvg:hover {
+  stroke: #acacac;
+}
+
+.btnIconActive svg {
+  stroke: #ffffff;
 }
 
 .playerBtnPrev {
@@ -297,4 +317,61 @@
 
 .volumeProgressLine {
   width: 109px;
+  --progress-height: 5px;
+  --progress-color: #ffffff;
+  --progress-bg-color: #797979;
+
+  height: var(--progress-height);
+  appearance: none;
+  cursor: pointer;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+  transition: 0.2s;
+}
+
+.volumeProgressLine:hover {
+  --progress-height: 8px;
+}
+
+.volumeProgressLine::-webkit-slider-runnable-track {
+  position: relative;
+  height: var(--progress-height);
+  background: var(--progress-bg-color);
+}
+
+.volumeProgressLine::-webkit-slider-thumb {
+  --thumb-height: 1px;
+  --thumb-width: 1px;
+  position: relative;
+  -webkit-appearance: none;
+  width: var(--thumb-width, var(--thumb-height));
+  box-shadow: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0
+    100vmax var(--progress-color);
+}
+
+.volumeProgressLine::-webkit-slider-runnable-track {
+  background: var(--progress-bg-color);
+}
+
+/* FF */
+.volumeProgressLine::-moz-range-track {
+  width: 100%;
+  height: var(--progress-height);
+  background: var(--progress-bg-color);
+  border: none;
+  border-radius: 0px;
+}
+
+.volumeProgressLine::-moz-range-thumb {
+  border: none;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.volumeProgressLine::-moz-range-progress {
+  background-color: var(--progress-color);
+  height: var(--progress-height);
 }

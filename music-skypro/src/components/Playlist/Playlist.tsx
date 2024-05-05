@@ -3,8 +3,14 @@ import styles from "./Playlist.module.css";
 import Track from "@/components/Track/Track";
 import { getTracks } from "@/api/tracks";
 import { trackType } from "@/types";
+import { useEffect, useState } from "react";
+import { error } from "console";
 
-export default async function Playlist() {
+type PlaylistType = {
+  setTrack: (param: trackType) => void;
+};
+
+export default function Playlist({ setTrack }: PlaylistType) {
   // let tracksData: trackType[];
 
   // try {
@@ -12,7 +18,15 @@ export default async function Playlist() {
   // } catch (error: any) {
   //   throw new Error(error.message);
   // }
-  const tracksData: trackType[] = await getTracks();
+
+  const [tracksData, setTracksData] = useState<trackType[]>([]);
+  useEffect(() => {
+    getTracks()
+      .then((data: trackType[]) => setTracksData(data))
+      .catch((error: any) => {
+        throw new Error(error.message);
+      });
+  }, []);
 
   return (
     <div className={styles.centerblockContent}>
@@ -35,10 +49,12 @@ export default async function Playlist() {
       <div className={styles.contentPlaylist}>
         {tracksData.map((trackData) => (
           <Track
+            onClick={() => setTrack(trackData)}
             key={trackData.id}
             name={trackData.name}
-            autor={trackData.autor}
+            author={trackData.author}
             album={trackData.album}
+            duration={trackData.duration_in_seconds}
           />
         ))}
       </div>
