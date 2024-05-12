@@ -121,3 +121,30 @@
   text-align: right;
   color: #696969;
 }
+
+.trackIconIsplaying {
+  display: block;
+  animation: bubble_out 1200ms infinite;
+}
+
+@keyframes bubble_out {
+  0% {
+    transform: scale(0.8);
+  }
+  25% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+.animationDot {
+  width: 16px;
+  height: 16px;
+  background-color: #b672ff;
+  border-radius: 8px;
+}
