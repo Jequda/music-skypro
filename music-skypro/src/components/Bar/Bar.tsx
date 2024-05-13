@@ -9,8 +9,8 @@ import { useAppDispatch, useAppSelector } from "@/hooks";
 import {
   setIsPlaying,
   setIsShaffle,
-  setNextTrack,
-  setPrevTrack,
+  nextTrack,
+  prevTrack,
 } from "@/store/features/PlaylistSlice";
 
 export default function Bar() {
@@ -91,12 +91,12 @@ export default function Bar() {
   };
 
   const HandleNextTrack = () => {
-    dispatch(setNextTrack());
+    dispatch(nextTrack());
     dispatch(setIsPlaying(true));
   };
 
   const HandlePrevTrack = () => {
-    dispatch(setPrevTrack());
+    dispatch(prevTrack());
   };
 
   return (

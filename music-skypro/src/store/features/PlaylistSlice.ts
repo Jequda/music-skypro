@@ -32,43 +32,36 @@ const playlistSlice = createSlice({
         () => 0.5 - Math.random()
       );
     },
-    setNextTrack: (state) => {
-      const playlist = state.isShuffle
-        ? state.shuffledPlaylist
-        : state.playlist;
-      const currentTrackIndex = playlist.findIndex(
-        (track) => track.id === state.currentTrack?.id
-      );
-      const newTrack = playlist[currentTrackIndex + 1];
-      if (newTrack) {
-        state.currentTrack = newTrack;
-      }
-    },
-    setPrevTrack: (state) => {
-      const playlist = state.isShuffle
-        ? state.shuffledPlaylist
-        : state.playlist;
-      const currentTrackIndex = playlist.findIndex(
-        (track) => track.id === state.currentTrack?.id
-      );
-      const prevTrack = playlist[currentTrackIndex - 1];
-      if (prevTrack) {
-        state.currentTrack = prevTrack;
-      }
-    },
     setIsShaffle: (state, action: PayloadAction<boolean>) => {
       state.isShuffle = action.payload;
     },
     setIsPlaying: (state, action: PayloadAction<boolean>) => {
       state.isPlaying = action.payload;
     },
+    nextTrack: changeTrack(1),
+    prevTrack: changeTrack(-1),
   },
 });
+function changeTrack(direction: number) {
+  return (state: PlaylistStateType) => {
+    const currentTracks = state.isShuffle
+      ? state.shuffledPlaylist
+      : state.playlist;
+    let newIndex =
+      currentTracks.findIndex((item) => item.id === state.currentTrack?.id) +
+      direction;
 
+    // Циклическое переключение
+    newIndex = (newIndex + currentTracks.length) % currentTracks.length;
+
+    state.currentTrack = currentTracks[newIndex];
+    state.isPlaying = true;
+  };
+}
 export const {
   setCurrentTrack,
-  setNextTrack,
-  setPrevTrack,
+  nextTrack,
+  prevTrack,
   setIsShaffle,
   setIsPlaying,
 } = playlistSlice.actions;
