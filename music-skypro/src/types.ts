@@ -7,7 +7,6 @@ type userType = {
 };
 
 export type trackType = {
-  autor: string;
   id: number;
   name: string;
   author: string;

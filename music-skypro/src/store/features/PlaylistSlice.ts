@@ -7,6 +7,14 @@ type PlaylistStateType = {
   shuffledPlaylist: trackType[];
   isShuffle: boolean;
   isPlaying: boolean;
+  filterOptions: {
+    author: string[];
+    genre: string[];
+    order: string;
+    searchValue: string;
+  };
+  filteredTracks: trackType[];
+  initialTracks: trackType[];
 };
 
 const initialState: PlaylistStateType = {
@@ -15,12 +23,27 @@ const initialState: PlaylistStateType = {
   shuffledPlaylist: [],
   isShuffle: false,
   isPlaying: false,
+  filterOptions: {
+    author: [],
+    genre: [],
+    order: "По умолчанию",
+    searchValue: "",
+  },
+  filteredTracks: [],
+  initialTracks: [],
 };
 
 const playlistSlice = createSlice({
   name: "playlist",
   initialState,
   reducers: {
+    setInitialTracks: (
+      state,
+      action: PayloadAction<{ initialTracks: trackType[] }>
+    ) => {
+      state.initialTracks = action.payload.initialTracks;
+      state.filteredTracks = action.payload.initialTracks;
+    },
     setCurrentTrack: (
       state,
       action: PayloadAction<{ track: trackType; tracksData: trackType[] }>
@@ -40,8 +63,42 @@ const playlistSlice = createSlice({
     },
     nextTrack: changeTrack(1),
     prevTrack: changeTrack(-1),
+    setFilters: (
+      state,
+      action: PayloadAction<{
+        author?: string[];
+        genre?: string[];
+        order?: string;
+        searchValue?: string;
+      }>
+    ) => {
+      state.filterOptions = {
+        author: action.payload.author || state.filterOptions.author,
+        genre: action.payload.genre || state.filterOptions.genre,
+        order: action.payload.order || state.filterOptions.order,
+        searchValue:
+          action.payload.searchValue || state.filterOptions.searchValue,
+      };
+      state.filteredTracks = state.initialTracks.filter((track) => {
+        const hasAuthor = state.filterOptions.author.length != 0;
+
+        const isAuthors = hasAuthor
+          ? state.filterOptions.author.includes(track.author)
+          : true;
+        const hasGenres = state.filterOptions.genre.length != 0;
+        const isGenres = hasGenres
+          ? state.filterOptions.genre.includes(track.genre)
+          : true;
+
+        const hasSearchValue = track.name
+          .toLowerCase()
+          .includes(state.filterOptions.searchValue.toLowerCase());
+        return (isAuthors || isGenres) && hasSearchValue;
+      });
+    },
   },
 });
+
 function changeTrack(direction: number) {
   return (state: PlaylistStateType) => {
     const currentTracks = state.isShuffle
@@ -59,10 +116,12 @@ function changeTrack(direction: number) {
   };
 }
 export const {
+  setInitialTracks,
   setCurrentTrack,
   nextTrack,
   prevTrack,
   setIsShaffle,
   setIsPlaying,
+  setFilters,
 } = playlistSlice.actions;
 export const playlistReducer = playlistSlice.reducer;

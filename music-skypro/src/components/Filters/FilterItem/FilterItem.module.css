@@ -55,6 +55,29 @@
   text-decoration: underline;
   cursor: pointer;
 }
+.SelectedFilter {
+  color: #ad61ff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.filterNumber {
+  background-color: #ad61ff;
+  cursor: pointer;
+  font-family: StratosSkyeng;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 13px;
+  letter-spacing: 0px;
+  text-align: center;
+  border-radius: 25px;
+  width: 26px;
+  height: 25.5px;
+  position: absolute;
+  padding-top: 7px;
+  top: -8px;
+  right: 0px;
+}
 
 .activeFilter.activeFilter::-webkit-scrollbar {
   width: 4px;

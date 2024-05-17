@@ -1,19 +1,34 @@
+"use client";
+
 import classnames from "classnames";
 import styles from "./Playlist.module.css";
 import Track from "@/components/Track/Track";
 import { getTracks } from "@/api/tracks";
 import { trackType } from "@/types";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { setInitialTracks } from "@/store/features/PlaylistSlice";
+import { useEffect, useState } from "react";
+import Filters from "../Filters/Filters";
 
-export default async function Playlist() {
+export default function Playlist() {
+  const dispatch = useAppDispatch();
+  const [tracks, setTracks] = useState<trackType[]>([]);
+  const filteredTracks = useAppSelector(
+    (state) => state.playlist.filteredTracks
+  );
+
   let tracksData: trackType[];
-  try {
-    tracksData = await getTracks();
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+
+  useEffect(() => {
+    getTracks().then((tracksData) => {
+      setTracks(tracksData);
+      dispatch(setInitialTracks({ initialTracks: tracksData }));
+    });
+  }, [dispatch]);
 
   return (
     <div className={styles.centerblockContent}>
+      <Filters tracksData={tracks} />
       <div className={styles.contentTitle}>
         <div className={classnames(styles.playlistTitleCol, styles.col01)}>
           Трек
@@ -31,8 +46,8 @@ export default async function Playlist() {
         </div>
       </div>
       <div className={styles.contentPlaylist}>
-        {tracksData.map((trackData) => (
-          <Track track={trackData} tracksData={tracksData} key={trackData.id} />
+        {filteredTracks.map((trackData) => (
+          <Track track={trackData} tracksData={tracks} key={trackData.id} />
         ))}
       </div>
     </div>
