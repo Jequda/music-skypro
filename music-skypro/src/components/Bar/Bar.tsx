@@ -1,6 +1,13 @@
 "use client";
 
-import { ChangeEvent, use, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  use,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styles from "./Bar.module.css";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import classNames from "classnames";
@@ -48,12 +55,12 @@ export default function Bar() {
     }
   };
 
-  const handleSeek = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleSeek = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     if (audioRef.current) {
       setCurrentTime(Number(e.target.value));
       audioRef.current.currentTime = Number(e.target.value);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (isPlaying) {
