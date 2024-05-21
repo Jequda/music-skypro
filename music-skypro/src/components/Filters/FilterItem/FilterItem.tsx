@@ -4,6 +4,7 @@ import { trackType } from "@/types";
 import { order } from "../data";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { setFilters } from "@/store/features/PlaylistSlice";
+import { useEffect, useState } from "react";
 
 type FilterItemType = {
   title: string;
@@ -11,7 +12,7 @@ type FilterItemType = {
   handleFilterClick: (newFilter: string) => void;
   isOpened: boolean;
   tracksData: trackType[];
-  filterNumber: number;
+  optionList: string[] | string;
 };
 
 export default function FilterItem({
@@ -20,8 +21,9 @@ export default function FilterItem({
   handleFilterClick,
   isOpened,
   tracksData,
-  filterNumber,
+  optionList,
 }: FilterItemType) {
+  const [filterNumber, SetFilterNumber] = useState<number>(0);
   const authorsList = useAppSelector(
     (state) => state.playlist.filterOptions.author
   );
@@ -40,18 +42,33 @@ export default function FilterItem({
   };
 
   const toggleFilter = (item: string) => {
-    dispatch(
-      setFilters({
-        author: authorsList.includes(item)
-          ? authorsList.filter((el) => el !== item)
-          : [...authorsList, item],
+    if (value !== "order" && optionList && optionList instanceof Array) {
+      dispatch(
+        // setFilters({
+        //   author: authorsList.includes(item)
+        //     ? authorsList.filter((el) => el !== item)
+        //     : [...authorsList, item],
 
-        genre: genreList.includes(item)
-          ? genreList.filter((el) => el !== item)
-          : [...genreList, item],
-      })
-    );
+        //   genre: genreList.includes(item)
+        //     ? genreList.filter((el) => el !== item)
+        //     : [...genreList, item],
+
+        // })
+        setFilters({
+          [value]: optionList.includes(item)
+            ? optionList.filter((el) => el !== item)
+            : [...optionList, item],
+        })
+      );
+    } else {
+      dispatch(setFilters({ order: item }));
+    }
   };
+
+  useEffect(() => {
+    if (value !== "order" && optionList) SetFilterNumber(optionList.length);
+    console.log(optionList);
+  }, [optionList, value]);
 
   getFilterList();
   return (
@@ -65,9 +82,9 @@ export default function FilterItem({
         >
           {title}
         </div>
-        {filterNumber > 0 ? (
+        {filterNumber > 0 && (
           <div className={styles.filterNumber}>{filterNumber}</div>
-        ) : null}
+        )}
         {isOpened && (
           <div className={styles.activeFilterContainer}>
             <ul className={classnames(styles.activeFilter)}>
@@ -77,7 +94,9 @@ export default function FilterItem({
                   key={item}
                   className={classnames({
                     [styles.SelectedFilter]:
-                      authorsList.includes(item) || genreList.includes(item),
+                      value === "order"
+                        ? item === optionList
+                        : optionList.includes(item),
                   })}
                 >
                   {item}

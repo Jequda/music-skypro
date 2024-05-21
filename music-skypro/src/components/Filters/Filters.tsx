@@ -8,18 +8,13 @@ import { trackType } from "@/types";
 import { useAppSelector } from "@/hooks";
 
 export default function Filters({ tracksData }: { tracksData: trackType[] }) {
+  const { author, genre, order } = useAppSelector(
+    (store) => store.playlist.filterOptions
+  );
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   function handleFilterClick(newFilter: string) {
     setActiveFilter((prev) => (prev === newFilter ? null : newFilter));
   }
-
-  const authorsList = useAppSelector(
-    (state) => state.playlist.filterOptions.author
-  );
-
-  const genreList = useAppSelector(
-    (state) => state.playlist.filterOptions.genre
-  );
 
   return (
     <div className={styles.centerblockFilter}>
@@ -31,7 +26,7 @@ export default function Filters({ tracksData }: { tracksData: trackType[] }) {
         title={filters[0].title}
         value={filters[0].value}
         tracksData={tracksData}
-        filterNumber={authorsList.length}
+        optionList={author}
       />
       <FilterItem
         isOpened={activeFilter === filters[1].title ? true : false}
@@ -39,7 +34,7 @@ export default function Filters({ tracksData }: { tracksData: trackType[] }) {
         title={filters[1].title}
         value={filters[1].value}
         tracksData={tracksData}
-        filterNumber={genreList.length}
+        optionList={genre}
       />
       <FilterItem
         isOpened={activeFilter === filters[2].title ? true : false}
@@ -47,7 +42,7 @@ export default function Filters({ tracksData }: { tracksData: trackType[] }) {
         title={filters[2].title}
         value={filters[2].value}
         tracksData={tracksData}
-        filterNumber={0}
+        optionList={order}
       />
     </div>
   );

@@ -90,11 +90,28 @@ const playlistSlice = createSlice({
           ? state.filterOptions.genre.includes(track.genre)
           : true;
 
-        const hasSearchValue = track.name
-          .toLowerCase()
-          .includes(state.filterOptions.searchValue.toLowerCase());
-        return (isAuthors || isGenres) && hasSearchValue;
+        const hasSearchValue =
+          track.name
+            .toLowerCase()
+            .includes(state.filterOptions.searchValue.toLowerCase()) ||
+          track.author
+            .toLowerCase()
+            .includes(state.filterOptions.searchValue.toLowerCase());
+        return isAuthors && isGenres && hasSearchValue;
       });
+      if (state.filterOptions.order === "Сначала новые") {
+        state.filteredTracks.sort(
+          (a, b) =>
+            new Date(b.release_date).getTime() -
+            new Date(a.release_date).getTime()
+        );
+      } else if (state.filterOptions.order === "Сначала старые") {
+        state.filteredTracks.sort(
+          (a, b) =>
+            new Date(a.release_date).getTime() -
+            new Date(b.release_date).getTime()
+        );
+      } else state.filteredTracks;
     },
   },
 });
