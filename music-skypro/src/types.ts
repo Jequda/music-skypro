@@ -18,3 +18,7 @@ export type trackType = {
   track_file: string;
   stared_user: userType[];
 };
+
+export type CategoryType = {
+  params: { id: string };
+};

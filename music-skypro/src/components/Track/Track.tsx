@@ -37,7 +37,7 @@ export default function Track({ track, tracksData }: TrackType) {
             ) : (
               <svg className={classNames(styles.trackTitleSvg)}>
                 <use
-                  xlinkHref={`img/icon/sprite.svg#icon-note
+                  xlinkHref={`/img/icon/sprite.svg#icon-note
               `}
                 />
               </svg>
@@ -57,7 +57,7 @@ export default function Track({ track, tracksData }: TrackType) {
         </div>
         <div className="track__time">
           <svg className={styles.trackTimeSvg}>
-            <use xlinkHref="img/icon/sprite.svg#icon-like" />
+            <use xlinkHref="/img/icon/sprite.svg#icon-like" />
           </svg>
           <span className={styles.trackTimeText}>
             {durationFormat(duration_in_seconds)}

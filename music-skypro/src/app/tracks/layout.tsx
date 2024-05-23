@@ -1,11 +1,14 @@
-import styles from "./page.module.css";
 import Bar from "@/components/Bar/Bar";
-import Sidebar from "@/components/Sidebar/Sidebar";
 import Nav from "@/components/Nav/Nav";
 import Search from "@/components/Search/Search";
-import Playlist from "@/components/Playlist/Playlist";
+import Sidebar from "@/components/Sidebar/Sidebar";
+import styles from "./layout.module.css";
 
-export default function Home() {
+export default function TrackLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
@@ -14,7 +17,7 @@ export default function Home() {
           <div className={styles.mainCenterblock}>
             <Search />
             <h2 className={styles.centerblockH2}>Треки</h2>
-            <Playlist />
+            {children}
           </div>
           <Sidebar />
         </main>

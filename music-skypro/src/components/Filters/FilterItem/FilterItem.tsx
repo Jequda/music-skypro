@@ -11,7 +11,6 @@ type FilterItemType = {
   value: "author" | "genre" | "order";
   handleFilterClick: (newFilter: string) => void;
   isOpened: boolean;
-  tracksData: trackType[];
   optionList: string[] | string;
 };
 
@@ -20,16 +19,10 @@ export default function FilterItem({
   value,
   handleFilterClick,
   isOpened,
-  tracksData,
   optionList,
 }: FilterItemType) {
+  const tracksData = useAppSelector((state) => state.playlist.initialTracks);
   const [filterNumber, SetFilterNumber] = useState<number>(0);
-  const authorsList = useAppSelector(
-    (state) => state.playlist.filterOptions.author
-  );
-  const genreList = useAppSelector(
-    (state) => state.playlist.filterOptions.genre
-  );
   const dispatch = useAppDispatch();
   const getFilterList = () => {
     if (value !== "order") {
@@ -44,16 +37,6 @@ export default function FilterItem({
   const toggleFilter = (item: string) => {
     if (value !== "order" && optionList && optionList instanceof Array) {
       dispatch(
-        // setFilters({
-        //   author: authorsList.includes(item)
-        //     ? authorsList.filter((el) => el !== item)
-        //     : [...authorsList, item],
-
-        //   genre: genreList.includes(item)
-        //     ? genreList.filter((el) => el !== item)
-        //     : [...genreList, item],
-
-        // })
         setFilters({
           [value]: optionList.includes(item)
             ? optionList.filter((el) => el !== item)
@@ -67,7 +50,6 @@ export default function FilterItem({
 
   useEffect(() => {
     if (value !== "order" && optionList) SetFilterNumber(optionList.length);
-    console.log(optionList);
   }, [optionList, value]);
 
   getFilterList();
