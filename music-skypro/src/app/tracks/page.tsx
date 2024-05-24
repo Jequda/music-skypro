@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from "@/hooks";
 import { trackType } from "@/types";
 import { setInitialTracks } from "@/store/features/PlaylistSlice";
 import { getTracks } from "@/api/tracks";
+import Filters from "@/components/Filters/Filters";
+import styles from "./layout.module.css";
 
 export default function MainTracksPage() {
   const dispatch = useAppDispatch();
@@ -20,5 +22,11 @@ export default function MainTracksPage() {
       dispatch(setInitialTracks({ initialTracks: tracksData }));
     });
   }, [dispatch]);
-  return <Playlist tracks={filteredTracks} playlist={tracks} />;
+  return (
+    <>
+      <h2 className={styles.centerblockH2}>Треки</h2>
+      <Filters />
+      <Playlist tracks={filteredTracks} playlist={tracks} />
+    </>
+  );
 }

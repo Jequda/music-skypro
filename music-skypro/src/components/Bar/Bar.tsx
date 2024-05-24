@@ -72,9 +72,9 @@ export default function Bar() {
 
   useEffect(() => {
     const ref = audioRef.current;
-    ref?.addEventListener("ended", HandleNextTrack);
+    ref?.addEventListener("ended", handleNextTrack);
     return () => {
-      ref?.removeEventListener("ended", HandleNextTrack);
+      ref?.removeEventListener("ended", handleNextTrack);
     };
   }, [audioRef.current]);
 
@@ -88,7 +88,7 @@ export default function Bar() {
     }
   }, [volume, currentTrack]);
 
-  const HandleShaffleTrack = () => {
+  const handleShaffleTrack = () => {
     console.log(isShuffle);
     if (isShuffle) {
       dispatch(setIsShaffle(false));
@@ -97,12 +97,12 @@ export default function Bar() {
     }
   };
 
-  const HandleNextTrack = () => {
+  const handleNextTrack = () => {
     dispatch(nextTrack());
     dispatch(setIsPlaying(true));
   };
 
-  const HandlePrevTrack = () => {
+  const handlePrevTrack = () => {
     dispatch(prevTrack());
   };
 
@@ -129,7 +129,7 @@ export default function Bar() {
               <div className={styles.barPlayer}>
                 <div className={styles.playerControls}>
                   <div
-                    onClick={HandlePrevTrack}
+                    onClick={handlePrevTrack}
                     className={styles.playerBtnPrev}
                   >
                     <svg className={styles.playerBtnPrevSvg}>
@@ -146,7 +146,7 @@ export default function Bar() {
                     </svg>
                   </div>
                   <div
-                    onClick={HandleNextTrack}
+                    onClick={handleNextTrack}
                     className={styles.playerBtnNext}
                   >
                     <svg className={styles.playerBtnNextSvg}>
@@ -165,7 +165,7 @@ export default function Bar() {
                     </svg>
                   </div>
                   <div
-                    onClick={HandleShaffleTrack}
+                    onClick={handleShaffleTrack}
                     className={classNames(
                       styles.playerBtnShuffle,
                       isShuffle ? styles.btnIconActive : null

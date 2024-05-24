@@ -5,8 +5,6 @@ import styles from "./Playlist.module.css";
 import Track from "@/components/Track/Track";
 import { trackType } from "@/types";
 
-import Filters from "../Filters/Filters";
-
 export default function Playlist({
   tracks,
   playlist,
@@ -16,7 +14,6 @@ export default function Playlist({
 }) {
   return (
     <div className={styles.centerblockContent}>
-      <Filters />
       <div className={styles.contentTitle}>
         <div className={classnames(styles.playlistTitleCol, styles.col01)}>
           Трек

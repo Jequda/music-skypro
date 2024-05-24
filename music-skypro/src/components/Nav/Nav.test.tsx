@@ -1,13 +1,13 @@
-// import "@testing-library/jest-dom";
-// import { render, screen } from "@testing-library/react";
-// import Nav from "./Nav";
+import "@testing-library/jest-dom";
+import { render, screen } from "@testing-library/react";
+import Nav from "./Nav";
 
-// describe("Компонент навигации", () => {
-//   it("Должен отрендерить картинку с логотипом", () => {
-//     render(<Nav />);
+describe("Компонент навигации", () => {
+  it("Должен отрендерить картинку с логотипом", () => {
+    render(<Nav />);
 
-//     const image = screen.getByAltText("Логотип СкайПро музыка");
+    const image = screen.getByAltText("Логотип СкайПро музыка");
 
-//     expect(image).toBeInTheDocument();
-//   });
-// });
+    expect(image).toBeInTheDocument();
+  });
+});
