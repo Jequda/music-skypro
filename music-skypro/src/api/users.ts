@@ -6,7 +6,15 @@ const tokenUrl = "https://skypro-music-api.skyeng.tech/user/token/";
 const refreshTokenUrl =
   "https://skypro-music-api.skyeng.tech/user/token/refresh/";
 
-export async function signupUser({ email, password, username }: userType) {
+export async function signupUser({
+  email,
+  password,
+  username,
+}: {
+  email: string;
+  password: string;
+  username: string;
+}) {
   const response = await fetch(signupUrl, {
     method: "POST",
     body: JSON.stringify({
@@ -26,7 +34,13 @@ export async function signupUser({ email, password, username }: userType) {
   return response.json();
 }
 
-export async function loginUser({ email, password }: userType) {
+export async function loginUser({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) {
   const response = await fetch(loginUrl, {
     method: "POST",
     body: JSON.stringify({

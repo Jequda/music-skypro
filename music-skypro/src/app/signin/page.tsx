@@ -5,24 +5,21 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import classnames from "classnames";
 import { loginUser } from "@/api/users";
-import { ChangeEvent, MouseEventHandler, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 export default function SigninPage() {
-  const [loginData, setLoginData] = useState({});
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
 
-  const handleInputChange =
-    (key: any) => (e: ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setLoginData({
-        ...loginData,
-        [key]: value,
-      });
-    };
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginData({
+      ...loginData,
+      [name]: value,
+    });
+  };
 
   const handleLogin = () => {
-    // loginUser({ loginData }).then((data) => {
-    //   login(data.user);
-    // });
+    loginUser(loginData).then((data) => {});
     console.log(loginData);
   };
 

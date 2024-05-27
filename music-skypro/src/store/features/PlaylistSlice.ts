@@ -77,7 +77,9 @@ const playlistSlice = createSlice({
         genre: action.payload.genre || state.filterOptions.genre,
         order: action.payload.order || state.filterOptions.order,
         searchValue:
-          action.payload.searchValue || state.filterOptions.searchValue,
+          typeof action.payload.searchValue === "string"
+            ? action.payload.searchValue
+            : state.filterOptions.searchValue,
       };
       state.filteredTracks = state.initialTracks.filter((track) => {
         const hasAuthor = state.filterOptions.author.length != 0;
