@@ -6,9 +6,14 @@ import styles from "./page.module.css";
 import classnames from "classnames";
 import { loginUser } from "@/api/users";
 import { ChangeEvent, useState } from "react";
+import { getToken } from "@/api/tracks";
+import { useUser } from "@/hooks/useUser";
+import { useRouter } from "next/navigation";
 
 export default function SigninPage() {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const { login } = useUser();
+  const router = useRouter();
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -18,9 +23,11 @@ export default function SigninPage() {
     });
   };
 
-  const handleLogin = () => {
-    loginUser(loginData).then((data) => {});
-    console.log(loginData);
+  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    loginUser(loginData).then((data) => {
+      login(data, loginData);
+    });
   };
 
   return (
@@ -39,7 +46,7 @@ export default function SigninPage() {
             <input
               className={classnames(styles.modalInput, styles.login)}
               type="text"
-              name="login"
+              name="email"
               placeholder="Почта"
               onChange={handleInputChange}
             />

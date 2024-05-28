@@ -28,7 +28,7 @@ export async function signupUser({
     },
   });
   if (!response.ok) {
-    throw new Error("Такой пользователь уже существует");
+    throw new Error("Неправильный логин или пароль");
   }
 
   return response.json();
