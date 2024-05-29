@@ -6,14 +6,11 @@ import styles from "./page.module.css";
 import classnames from "classnames";
 import { loginUser } from "@/api/users";
 import { ChangeEvent, useState } from "react";
-import { getToken } from "@/api/tracks";
 import { useUser } from "@/hooks/useUser";
-import { useRouter } from "next/navigation";
 
 export default function SigninPage() {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
-  const { login } = useUser();
-  const router = useRouter();
+  const { login }: any = useUser(); // не знаю какой тип тут написать
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -58,7 +55,7 @@ export default function SigninPage() {
               onChange={handleInputChange}
             />
             <button onClick={handleLogin} className={styles.modalBtnEnter}>
-              <span>Войти</span>
+              <span className={styles.modalBtnEnterText}>Войти</span>
             </button>
             <button className={styles.modalBtnSignup}>
               <Link href="/signup">Зарегистрироваться</Link>

@@ -4,6 +4,7 @@ const appUrlCategory =
 const appUrlTrack = "https://skypro-music-api.skyeng.tech/catalog/track/";
 const appUrlFavoriteTracks =
   "https://skypro-music-api.skyeng.tech/catalog/track/favorite/all/";
+const appUrlToken = "https://skypro-music-api.skyeng.tech/user/token/";
 
 export async function getTracks() {
   const res = await fetch(apiUrl);
@@ -26,7 +27,7 @@ export async function getCategoryTracks(id: string) {
   return data.items;
 }
 
-export async function postFavoriteTrack(id: string) {
+export async function postFavoriteTracks(id: string) {
   const res = await fetch(appUrlTrack + id + "/favorite", {
     method: "POST",
     // headers: {
@@ -41,8 +42,13 @@ export async function postFavoriteTrack(id: string) {
   return res.json();
 }
 
-export async function getFavoriteTrack() {
-  const res = await fetch(appUrlFavoriteTracks);
+export async function getFavoriteTracks(token: any) {
+  const res = await fetch(appUrlFavoriteTracks, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   if (!res.ok) {
     throw new Error("Ошибка при получении данных");
@@ -53,7 +59,7 @@ export async function getFavoriteTrack() {
 }
 
 export async function getToken({ email, password }: any) {
-  const res = await fetch("https://skypro-music-api.skyeng.tech/user/token/", {
+  const res = await fetch(appUrlToken, {
     method: "POST",
     body: JSON.stringify({
       email,

@@ -137,12 +137,7 @@
 .modalBtnEnter a {
   width: 100%;
   height: 100%;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 24px;
-  letter-spacing: -0.05px;
-  color: #ffffff;
+
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -152,6 +147,15 @@
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
+}
+
+.modalBtnEnterText {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: -0.05px;
+  color: #ffffff;
 }
 
 .modalBtnSignup {

@@ -22,3 +22,18 @@ export type trackType = {
 export type CategoryType = {
   params: { id: string };
 };
+
+export type UserContextType = {
+  user: {
+    id: number;
+    username: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+  };
+  login: (
+    newUser: number,
+    loginData: { email: string; password: string }
+  ) => void;
+  logout: () => void;
+};

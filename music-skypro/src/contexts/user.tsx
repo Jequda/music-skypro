@@ -1,6 +1,7 @@
 "use client";
 
 import { getToken } from "@/api/tracks";
+import { UserContextType } from "@/types";
 import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, createContext, useState } from "react";
 
@@ -13,17 +14,14 @@ function getUserFromLocalStorage() {
   }
 }
 
-type UserContextType = {
-  user: any;
-  login: (newUser: any, loginData: any) => void;
-  logout: () => void;
-};
-
 export const UserContext = createContext<UserContextType | null>(null);
 export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const [user, setUser] = useState(getUserFromLocalStorage());
-  function login(newUser: any, loginData: any) {
+  function login(
+    newUser: number,
+    loginData: { email: string; password: string }
+  ) {
     setUser(newUser);
     localStorage.setItem("user", JSON.stringify(newUser));
     getToken(loginData).then((tokenData) => {
@@ -34,6 +32,7 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
   function logout() {
     setUser(null);
     localStorage.removeItem("user");
+    router.push("signin");
   }
 
   return (
