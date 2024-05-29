@@ -10,15 +10,17 @@ export default function Nav() {
 
   return (
     <nav className={styles.mainNav}>
-      <div className={styles.navLogo}>
-        <Image
-          className={styles.logoImage}
-          src="/img/logo.png"
-          alt="Логотип СкайПро музыка"
-          width={113}
-          height={17}
-        />
-      </div>
+      <Link href="/">
+        <div className={styles.navLogo}>
+          <Image
+            className={styles.logoImage}
+            src="/img/logo.png"
+            alt="Логотип СкайПро музыка"
+            width={113}
+            height={17}
+          />
+        </div>
+      </Link>
       <div
         onClick={() => setIsOpened((prev) => !prev)}
         className={styles.navBurger}
@@ -31,9 +33,9 @@ export default function Nav() {
         <div className={styles.navMenu}>
           <ul className={styles.menuList}>
             <li className={styles.menuItem}>
-              <a href="#" className={styles.menuLink}>
+              <Link href="/" className={styles.menuLink}>
                 Главное
-              </a>
+              </Link>
             </li>
             <li className={styles.menuItem}>
               <a href="#" className={styles.menuLink}>

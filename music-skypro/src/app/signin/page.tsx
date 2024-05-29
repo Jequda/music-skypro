@@ -1,9 +1,35 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./page.module.css";
 import classnames from "classnames";
+import { loginUser } from "@/api/users";
+import { ChangeEvent, useState } from "react";
+import { getToken } from "@/api/tracks";
+import { useUser } from "@/hooks/useUser";
+import { useRouter } from "next/navigation";
 
 export default function SigninPage() {
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const { login } = useUser();
+  const router = useRouter();
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginData({
+      ...loginData,
+      [name]: value,
+    });
+  };
+
+  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    loginUser(loginData).then((data) => {
+      login(data, loginData);
+    });
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.containerEnter}>
@@ -20,17 +46,19 @@ export default function SigninPage() {
             <input
               className={classnames(styles.modalInput, styles.login)}
               type="text"
-              name="login"
+              name="email"
               placeholder="Почта"
+              onChange={handleInputChange}
             />
             <input
               className={styles.modalInput}
               type="password"
               name="password"
               placeholder="Пароль"
+              onChange={handleInputChange}
             />
-            <button className={styles.modalBtnEnter}>
-              <Link href="/">Войти</Link>
+            <button onClick={handleLogin} className={styles.modalBtnEnter}>
+              <span>Войти</span>
             </button>
             <button className={styles.modalBtnSignup}>
               <Link href="/signup">Зарегистрироваться</Link>

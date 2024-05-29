@@ -1,4 +1,4 @@
-type userType = {
+export type userType = {
   id: number;
   username: string;
   first_name: string;
@@ -17,4 +17,8 @@ export type trackType = {
   logo: string | null;
   track_file: string;
   stared_user: userType[];
+};
+
+export type CategoryType = {
+  params: { id: string };
 };

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "./SidebarItems.module.css";
 import Image from "next/image";
 
@@ -6,7 +7,7 @@ export default function SidebarItems() {
     <div className={styles.sidebarBlock}>
       <div className={styles.sidebarList}>
         <div className={styles.sidebarItem}>
-          <a className={styles.sidebarLink} href="#">
+          <Link className={styles.sidebarLink} href="/tracks/category/1">
             <Image
               className={styles.sidebarImg}
               src="/img/playlist01.png"
@@ -14,10 +15,10 @@ export default function SidebarItems() {
               width={250}
               height={150}
             />
-          </a>
+          </Link>
         </div>
         <div className={styles.sidebarItem}>
-          <a className={styles.sidebarLink} href="#">
+          <Link className={styles.sidebarLink} href="/tracks/category/2">
             <Image
               className={styles.sidebarImg}
               src="/img/playlist02.png"
@@ -25,10 +26,10 @@ export default function SidebarItems() {
               width={250}
               height={150}
             />
-          </a>
+          </Link>
         </div>
         <div className={styles.sidebarItem}>
-          <a className={styles.sidebarLink} href="#">
+          <Link className={styles.sidebarLink} href="/tracks/category/3">
             <Image
               className={styles.sidebarImg}
               src="/img/playlist03.png"
@@ -36,7 +37,7 @@ export default function SidebarItems() {
               width={250}
               height={150}
             />
-          </a>
+          </Link>
         </div>
       </div>
     </div>
