@@ -8,9 +8,11 @@ import { trackType } from "@/types";
 export default function Playlist({
   tracks,
   playlist,
+  isFavorite,
 }: {
   tracks: trackType[];
   playlist: trackType[];
+  isFavorite?: boolean;
 }) {
   return (
     <div className={styles.centerblockContent}>
@@ -32,7 +34,12 @@ export default function Playlist({
       </div>
       <div className={styles.contentPlaylist}>
         {tracks?.map((trackData) => (
-          <Track track={trackData} tracksData={playlist} key={trackData.id} />
+          <Track
+            track={trackData}
+            tracksData={playlist}
+            key={trackData.id}
+            isFavorite={isFavorite}
+          />
         ))}
       </div>
     </div>

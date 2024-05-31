@@ -13,6 +13,8 @@ type ErrorType = {
   reset: () => void;
 };
 
+// если ошибка 401, то вернуть обратно
+
 export default function Error({ error, reset }: ErrorType) {
   useEffect(() => {
     // Логирование ошибки

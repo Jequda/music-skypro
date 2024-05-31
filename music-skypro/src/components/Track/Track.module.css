@@ -148,3 +148,11 @@
   background-color: #b672ff;
   border-radius: 8px;
 }
+
+.likeButton:hover {
+  fill: gray;
+}
+
+.activeLike {
+  fill: #b672ff;
+}

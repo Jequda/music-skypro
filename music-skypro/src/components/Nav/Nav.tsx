@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@/hooks/useUser";
 import styles from "./Nav.module.css";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,6 +8,7 @@ import { useState } from "react";
 
 export default function Nav() {
   const [isOpened, setIsOpened] = useState<boolean>(false);
+  const { user } = useUser();
 
   return (
     <nav className={styles.mainNav}>
@@ -42,11 +44,13 @@ export default function Nav() {
                 Мой плейлист
               </Link>
             </li>
-            <li className={styles.menuItem}>
-              <Link href="/signin" className={styles.menuLink}>
-                Войти
-              </Link>
-            </li>
+            {!user?.email && (
+              <li className={styles.menuItem}>
+                <Link href="/signin" className={styles.menuLink}>
+                  Войти
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       ) : null}

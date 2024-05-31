@@ -1,8 +1,11 @@
 import Bar from "@/components/Bar/Bar";
 import Nav from "@/components/Nav/Nav";
 import Search from "@/components/Search/Search";
-import Sidebar from "@/components/Sidebar/Sidebar";
 import styles from "./layout.module.css";
+import dynamic from "next/dynamic";
+const Sidebar = dynamic(() => import("@/components/Sidebar/Sidebar"), {
+  ssr: false,
+});
 
 export default function TrackLayout({
   children,

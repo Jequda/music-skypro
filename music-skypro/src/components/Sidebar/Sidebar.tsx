@@ -5,7 +5,7 @@ import styles from "./Sidebar.module.css";
 import SidebarItems from "./SidebarItems/SidebarItems";
 
 export default function Sidebar() {
-  const { user, logout }: any = useUser(); // не знаю какой тип тут написать
+  const { user, logout } = useUser();
 
   return (
     <div className={styles.main__sidebar}>

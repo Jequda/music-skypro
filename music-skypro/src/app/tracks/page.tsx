@@ -15,7 +15,7 @@ export default function MainTracksPage() {
   const filteredTracks = useAppSelector(
     (state) => state.playlist.filteredTracks
   );
-
+  // после лайка запустить gettracks, заново запустить initialtracks
   useEffect(() => {
     getTracks().then((tracksData) => {
       setTracks(tracksData);

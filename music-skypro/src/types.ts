@@ -24,16 +24,17 @@ export type CategoryType = {
 };
 
 export type UserContextType = {
-  user: {
-    id: number;
-    username: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-  };
+  user: userType | null;
+
+  token?: TokenType;
   login: (
     newUser: number,
     loginData: { email: string; password: string }
   ) => void;
   logout: () => void;
+};
+
+export type TokenType = {
+  access: string;
+  refresh: string;
 };
