@@ -40,7 +40,7 @@ export async function postFavoriteTracks(id: number, token: string) {
   });
 
   if (!res.ok) {
-    throw new Error("Пользователь не авторизован");
+    throw new Error(JSON.stringify(res.status));
   }
 
   return res.json();
@@ -55,7 +55,7 @@ export async function deleteFavoriteTracks(id: number, token: string) {
   });
 
   if (!res.ok) {
-    throw new Error("Пользователь не авторизован");
+    throw new Error(JSON.stringify(res.status));
   }
 
   return res.json();
@@ -77,7 +77,13 @@ export async function getFavoriteTracks(token: string) {
   return data;
 }
 
-export async function getToken({ email, password }: any) {
+export async function getToken({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) {
   const res = await fetch(appUrlToken, {
     method: "POST",
     body: JSON.stringify({

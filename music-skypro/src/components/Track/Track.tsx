@@ -7,7 +7,11 @@ import { trackType } from "@/types";
 import { setCurrentTrack } from "@/store/features/PlaylistSlice";
 import classNames from "classnames";
 import { useState } from "react";
-import { deleteFavoriteTracks, postFavoriteTracks } from "@/api/tracks";
+import {
+  deleteFavoriteTracks,
+  postFavoriteTracks,
+  refreshToken,
+} from "@/api/tracks";
 import { useUser } from "@/hooks/useUser";
 
 type TrackType = {
@@ -22,7 +26,7 @@ export default function Track({ track, tracksData, isFavorite }: TrackType) {
   const isPlaying = useAppSelector((state) => state.playlist.isPlaying);
   const dispatch = useAppDispatch();
   const isCurrentTrack = currentTrack ? currentTrack.id === id : false;
-  const { user, token }: any = useUser(); // не знаю какой тип тут написать
+  const { user, token } = useUser();
   const isLikedByUser =
     isFavorite || !!track.stared_user.find((arg) => arg.id === user?.id);
   const [isLiked, setIsLiked] = useState(isLikedByUser);
@@ -31,14 +35,30 @@ export default function Track({ track, tracksData, isFavorite }: TrackType) {
     dispatch(setCurrentTrack({ track, tracksData }));
   };
 
-  const handleLikeTrack = () => {
-    // const isLiked = !!track.stared_user.find((arg) => arg.id === user.id);
-    if (!isLiked) {
-      postFavoriteTracks(track.id, token?.access);
-      setIsLiked((prev) => !prev);
+  const handleLikeTrack = (e: React.MouseEvent<SVGUseElement>) => {
+    e.stopPropagation();
+    if (user?.email) {
+      if (!isLiked) {
+        postFavoriteTracks(track.id, token?.access!).catch((error) => {
+          if (error.message === "401" && user) {
+            refreshToken(token?.refresh!).then((data) => {
+              postFavoriteTracks(track.id, data.access);
+            });
+          }
+        });
+        setIsLiked((prev) => !prev);
+      } else {
+        deleteFavoriteTracks(track.id, token?.access!).catch((error) => {
+          if (error.message === "401" && user) {
+            refreshToken(token?.refresh!).then((data) => {
+              deleteFavoriteTracks(track.id, data.access);
+            });
+          }
+        });
+        setIsLiked((prev) => !prev);
+      }
     } else {
-      deleteFavoriteTracks(track.id, token?.access);
-      setIsLiked((prev) => !prev);
+      alert("Для добавления трека, пожалуйста авторизуйтесь");
     }
   };
 

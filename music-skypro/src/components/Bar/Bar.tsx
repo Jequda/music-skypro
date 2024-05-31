@@ -19,6 +19,12 @@ import {
   nextTrack,
   prevTrack,
 } from "@/store/features/PlaylistSlice";
+import { useUser } from "@/hooks/useUser";
+import {
+  deleteFavoriteTracks,
+  postFavoriteTracks,
+  refreshToken,
+} from "@/api/tracks";
 
 export default function Bar() {
   const currentTrack = useAppSelector((state) => state.playlist.currentTrack);
@@ -31,6 +37,11 @@ export default function Bar() {
   const [isLooping, setIsLooping] = useState<boolean>(false);
   const isShuffle = useAppSelector((state) => state.playlist.isShuffle);
   let duration = 0;
+  const { user, token } = useUser();
+  const isLikedByUser = !!currentTrack?.stared_user.find(
+    (arg) => arg.id === user?.id
+  );
+  const [isLiked, setIsLiked] = useState(isLikedByUser);
 
   if (audioRef.current?.duration) {
     duration = audioRef.current?.duration;
@@ -104,6 +115,34 @@ export default function Bar() {
 
   const handlePrevTrack = () => {
     dispatch(prevTrack());
+  };
+
+  const handleLikeTrack = () => {
+    if (user?.email) {
+      if (!isLiked) {
+        postFavoriteTracks(currentTrack?.id!, token?.access!).catch((error) => {
+          if (error.message === "401" && user) {
+            refreshToken(token?.refresh!).then((data) => {
+              postFavoriteTracks(currentTrack?.id!, data.access);
+            });
+          }
+        });
+        setIsLiked((prev) => !prev);
+      } else {
+        deleteFavoriteTracks(currentTrack?.id!, token?.access!).catch(
+          (error) => {
+            if (error.message === "401" && user) {
+              refreshToken(token?.refresh!).then((data) => {
+                deleteFavoriteTracks(currentTrack?.id!, data.access);
+              });
+            }
+          }
+        );
+        setIsLiked((prev) => !prev);
+      }
+    } else {
+      alert("Для добавления трека, пожалуйста авторизуйтесь");
+    }
   };
 
   return (
@@ -196,7 +235,13 @@ export default function Bar() {
                   </div>
                   <div className={styles.trackPlayLikeDis}>
                     <div className={styles.trackPlayLike}>
-                      <svg className={styles.trackPlayLikeSvg}>
+                      <svg
+                        onClick={handleLikeTrack}
+                        className={classNames(
+                          styles.trackPlayLikeSvg,
+                          isLiked && styles.activeLike
+                        )}
+                      >
                         <use xlinkHref="/img/icon/sprite.svg#icon-like" />
                       </svg>
                     </div>

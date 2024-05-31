@@ -18,7 +18,7 @@ export default function FavoritePage() {
         setTracksData(data);
       })
       .catch((error) => {
-        if (error.message === "401" && !user) {
+        if (error.message === "401" && user) {
           refreshToken(token?.refresh!).then((data) => {
             getFavoriteTracks(data.access).then((newData) => {
               setTracksData(newData);
