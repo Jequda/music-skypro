@@ -41,7 +41,6 @@ export default function Bar() {
   const isLikedByUser = !!currentTrack?.stared_user.find(
     (arg) => arg.id === user?.id
   );
-  const [isLiked, setIsLiked] = useState(isLikedByUser);
 
   if (audioRef.current?.duration) {
     duration = audioRef.current?.duration;
@@ -119,7 +118,7 @@ export default function Bar() {
 
   const handleLikeTrack = () => {
     if (user?.email) {
-      if (!isLiked) {
+      if (!isLikedByUser) {
         postFavoriteTracks(currentTrack?.id!, token?.access!).catch((error) => {
           if (error.message === "401" && user) {
             refreshToken(token?.refresh!).then((data) => {
@@ -127,7 +126,6 @@ export default function Bar() {
             });
           }
         });
-        setIsLiked((prev) => !prev);
       } else {
         deleteFavoriteTracks(currentTrack?.id!, token?.access!).catch(
           (error) => {
@@ -138,7 +136,6 @@ export default function Bar() {
             }
           }
         );
-        setIsLiked((prev) => !prev);
       }
     } else {
       alert("Для добавления трека, пожалуйста авторизуйтесь");
@@ -239,7 +236,7 @@ export default function Bar() {
                         onClick={handleLikeTrack}
                         className={classNames(
                           styles.trackPlayLikeSvg,
-                          isLiked && styles.activeLike
+                          isLikedByUser && styles.activeLike
                         )}
                       >
                         <use xlinkHref="/img/icon/sprite.svg#icon-like" />

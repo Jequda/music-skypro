@@ -13,7 +13,7 @@ export default function SignUp() {
     password: "",
     username: "",
   });
-  const { login }: any = useUser(); // не знаю какой тип тут написать
+  const { login } = useUser(); // не знаю какой тип тут написать
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
