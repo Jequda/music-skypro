@@ -5,6 +5,7 @@ import styles from "../../layout.module.css";
 
 export default async function CategoryPage({ params }: CategoryType) {
   const tracksData = await getCategoryTracks(params.id);
+
   let title = "Треки";
   {
     switch (params.id) {

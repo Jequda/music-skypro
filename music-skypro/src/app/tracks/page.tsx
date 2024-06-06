@@ -8,6 +8,7 @@ import { setInitialTracks } from "@/store/features/PlaylistSlice";
 import { getTracks } from "@/api/tracks";
 import Filters from "@/components/Filters/Filters";
 import styles from "./layout.module.css";
+import { useUser } from "@/hooks/useUser";
 
 export default function MainTracksPage() {
   const dispatch = useAppDispatch();
@@ -15,6 +16,7 @@ export default function MainTracksPage() {
   const filteredTracks = useAppSelector(
     (state) => state.playlist.filteredTracks
   );
+
   // после лайка запустить gettracks, заново запустить initialtracks
   useEffect(() => {
     getTracks().then((tracksData) => {

@@ -9,7 +9,10 @@ const appUrlRefreshToken =
   "https://skypro-music-api.skyeng.tech/user/token/refresh/";
 
 export async function getTracks() {
-  const res = await fetch(apiUrl);
+  const res = await fetch(apiUrl, {
+    method: "GET",
+    cache: "no-cache",
+  });
 
   if (!res.ok) {
     throw new Error("Ошибка при получении данных");
@@ -21,6 +24,7 @@ export async function getTracks() {
 export async function getCategoryTracks(id: string) {
   const res = await fetch(appUrlCategory + id, {
     method: "GET",
+    cache: "no-cache",
   });
 
   if (!res.ok) {

@@ -27,6 +27,8 @@ const initialValue: UserContextType = {
   user: null,
   login: (param, data) => {},
   logout: () => {},
+  setIsLikedByUser: () => false,
+  isLikedByUser: false,
 };
 
 export const UserContext = createContext<UserContextType>(initialValue);
@@ -34,6 +36,7 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const [user, setUser] = useState(getUserFromLocalStorage());
   const [token, setToken] = useState(getTokenFromLocalStorage());
+  const [isLikedByUser, setIsLikedByUser] = useState<boolean>(false);
   function login(
     newUser: number,
     loginData: { email: string; password: string }
@@ -53,7 +56,9 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   return (
-    <UserContext.Provider value={{ user, token, login, logout }}>
+    <UserContext.Provider
+      value={{ user, token, login, logout, setIsLikedByUser, isLikedByUser }}
+    >
       {children}
     </UserContext.Provider>
   );
