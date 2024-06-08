@@ -35,8 +35,6 @@ export type UserContextType = {
     loginData: { email: string; password: string }
   ) => void;
   logout: () => void;
-  setIsLikedByUser: Dispatch<SetStateAction<boolean>>;
-  isLikedByUser: boolean;
 };
 
 export type TokenType = {

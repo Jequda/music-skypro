@@ -8,7 +8,6 @@ import { setInitialTracks } from "@/store/features/PlaylistSlice";
 import { getTracks } from "@/api/tracks";
 import Filters from "@/components/Filters/Filters";
 import styles from "./layout.module.css";
-import { useUser } from "@/hooks/useUser";
 
 export default function MainTracksPage() {
   const dispatch = useAppDispatch();

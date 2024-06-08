@@ -35,18 +35,38 @@ export default function Track({ track, tracksData, isFavorite }: TrackType) {
     dispatch(setCurrentTrack({ track, tracksData }));
   };
 
+  const [selectedTrackData, setSelectedTrackData] = useState<any>(track);
+
+  function setLike() {
+    const newData = {
+      stared_user: user,
+    };
+    setSelectedTrackData([
+      ...selectedTrackData.stared_user,
+      newData.stared_user,
+    ]);
+    console.log(selectedTrackData);
+  }
+
   const handleLikeTrack = (e: React.MouseEvent<SVGUseElement>) => {
     e.stopPropagation();
     if (user?.email) {
       if (!isLiked) {
-        postFavoriteTracks(track.id, token?.access!).catch((error) => {
-          if (error.message === "401" && user) {
-            refreshToken(token?.refresh!).then((data) => {
-              postFavoriteTracks(track.id, data.access);
-            });
-          }
-        });
-        setIsLiked((prev) => !prev);
+        postFavoriteTracks(track.id, token?.access!)
+          .then(() => {
+            setIsLiked((prev) => !prev);
+            setLike();
+
+            // обновить данные в глобальном хранилище в данном случае поле stared_user
+            // если api выдает лайк уже поставлен - throw new error
+          })
+          .catch((error) => {
+            if (error.message === "401" && user) {
+              refreshToken(token?.refresh!).then((data) => {
+                postFavoriteTracks(track.id, data.access);
+              });
+            }
+          });
       } else {
         deleteFavoriteTracks(track.id, token?.access!).catch((error) => {
           if (error.message === "401" && user) {

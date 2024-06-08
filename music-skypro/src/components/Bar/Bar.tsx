@@ -37,7 +37,7 @@ export default function Bar() {
   const [isLooping, setIsLooping] = useState<boolean>(false);
   const isShuffle = useAppSelector((state) => state.playlist.isShuffle);
   let duration = 0;
-  const { user, token, setIsLikedByUser } = useUser();
+  const { user, token } = useUser();
   const isLikedByUser = !!currentTrack?.stared_user.find(
     (arg) => arg.id === user?.id
   );
@@ -47,15 +47,6 @@ export default function Bar() {
   }
 
   const [isLiked, setIsLiked] = useState<any>();
-
-  useEffect(() => {
-    setIsLiked(() => {
-      const isLikedByUser = currentTrack?.stared_user.find(
-        (u) => u.id === user?.id
-      );
-      setIsLiked(isLikedByUser);
-    });
-  }, [currentTrack, user?.id]);
 
   const [volume, setVolume] = useState<number>(0.5); // Начальная громкость установлена на 50%
 
@@ -248,7 +239,7 @@ export default function Bar() {
                         onClick={handleLikeTrack}
                         className={classNames(
                           styles.trackPlayLikeSvg,
-                          isLiked ? styles.activeLike : null
+                          isLikedByUser ? styles.activeLike : null
                         )}
                       >
                         <use xlinkHref="/img/icon/sprite.svg#icon-like" />
