@@ -1,3 +1,6 @@
+import { trackType } from "@/types";
+import { revalidatePath } from "next/cache";
+
 const apiUrl = "https://skypro-music-api.skyeng.tech/catalog/track/all/";
 const appUrlCategory =
   "https://skypro-music-api.skyeng.tech/catalog/selection/";
@@ -8,7 +11,7 @@ const appUrlToken = "https://skypro-music-api.skyeng.tech/user/token/";
 const appUrlRefreshToken =
   "https://skypro-music-api.skyeng.tech/user/token/refresh/";
 
-export async function getTracks() {
+export async function getTracks({ id }: { id: number }) {
   const res = await fetch(apiUrl, {
     method: "GET",
     cache: "no-cache",
@@ -18,7 +21,12 @@ export async function getTracks() {
     throw new Error("Ошибка при получении данных");
   }
 
-  return res.json();
+  const data = await res.json();
+
+  return data.map((track: trackType) => {
+    const isLiked = !!track.stared_user.find((user) => user.id === id);
+    return { ...track, isLiked };
+  });
 }
 
 export async function getCategoryTracks(id: string) {

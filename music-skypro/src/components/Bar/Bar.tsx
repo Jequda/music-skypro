@@ -18,10 +18,12 @@ import {
   setIsShaffle,
   nextTrack,
   prevTrack,
+  setInitialTracks,
 } from "@/store/features/PlaylistSlice";
 import { useUser } from "@/hooks/useUser";
 import {
   deleteFavoriteTracks,
+  getTracks,
   postFavoriteTracks,
   refreshToken,
 } from "@/api/tracks";
@@ -38,17 +40,18 @@ export default function Bar() {
   const isShuffle = useAppSelector((state) => state.playlist.isShuffle);
   let duration = 0;
   const { user, token } = useUser();
-  const isLikedByUser = !!currentTrack?.stared_user.find(
-    (arg) => arg.id === user?.id
-  );
 
   if (audioRef.current?.duration) {
     duration = audioRef.current?.duration;
   }
 
-  const [isLiked, setIsLiked] = useState<any>();
+  const [isLiked, setIsLiked] = useState<boolean>(false);
 
   const [volume, setVolume] = useState<number>(0.5); // Начальная громкость установлена на 50%
+
+  useEffect(() => {
+    setIsLiked(!!currentTrack?.isLiked);
+  }, [currentTrack]);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -121,24 +124,57 @@ export default function Bar() {
   const handleLikeTrack = () => {
     if (user?.email) {
       if (!isLiked) {
-        postFavoriteTracks(currentTrack?.id!, token?.access!).catch((error) => {
-          if (error.message === "401" && user) {
-            refreshToken(token?.refresh!).then((data) => {
-              postFavoriteTracks(currentTrack?.id!, data.access);
+        postFavoriteTracks(currentTrack?.id!, token?.access!)
+          .then((data) => {
+            if (data.detail === "An error has occurred") {
+              throw new Error("Лайк уже поставлен");
+            }
+            getTracks({ id: user.id }).then((tracksData) => {
+              dispatch(setInitialTracks({ initialTracks: tracksData }));
             });
-          }
-          setIsLiked(!isLiked);
-        });
-      } else {
-        deleteFavoriteTracks(currentTrack?.id!, token?.access!).catch(
-          (error) => {
+            setIsLiked(!isLiked);
+          })
+          .catch((error) => {
             if (error.message === "401" && user) {
               refreshToken(token?.refresh!).then((data) => {
-                deleteFavoriteTracks(currentTrack?.id!, data.access);
+                postFavoriteTracks(currentTrack?.id!, data.access).then(
+                  (data) => {
+                    if (data.detail === "An error has occurred") {
+                      throw new Error("Лайк уже поставлен");
+                    }
+                  }
+                );
               });
+            } else {
+              console.log(error);
             }
-          }
-        );
+          });
+      } else {
+        deleteFavoriteTracks(currentTrack?.id!, token?.access!)
+          .then((data) => {
+            if (data.detail === "An error has occurred") {
+              throw new Error("Лайк уже убран");
+            }
+            getTracks({ id: user.id }).then((tracksData) => {
+              dispatch(setInitialTracks({ initialTracks: tracksData }));
+            });
+            setIsLiked(!isLiked);
+          })
+          .catch((error) => {
+            if (error.message === "401" && user) {
+              refreshToken(token?.refresh!).then((data) => {
+                deleteFavoriteTracks(currentTrack?.id!, data.access).then(
+                  (data) => {
+                    if (data.detail === "An error has occurred") {
+                      throw new Error("Лайк уже поставлен");
+                    }
+                  }
+                );
+              });
+            } else {
+              console.log(error);
+            }
+          });
       }
     } else {
       alert("Для добавления трека, пожалуйста авторизуйтесь");
@@ -239,7 +275,7 @@ export default function Bar() {
                         onClick={handleLikeTrack}
                         className={classNames(
                           styles.trackPlayLikeSvg,
-                          isLikedByUser ? styles.activeLike : null
+                          isLiked ? styles.activeLike : null
                         )}
                       >
                         <use xlinkHref="/img/icon/sprite.svg#icon-like" />

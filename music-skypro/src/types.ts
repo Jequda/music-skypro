@@ -20,6 +20,7 @@ export type trackType = {
   track_file: string;
   stared_user: userType[];
   isFavorite: boolean;
+  isLiked: boolean;
 };
 
 export type CategoryType = {

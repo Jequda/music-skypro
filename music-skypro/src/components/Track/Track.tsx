@@ -4,9 +4,12 @@ import { durationFormat } from "@/utills/durationFormat";
 import styles from "./Track.module.css";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { trackType } from "@/types";
-import { setCurrentTrack } from "@/store/features/PlaylistSlice";
+import {
+  setCurrentTrack,
+  setInitialTracks,
+} from "@/store/features/PlaylistSlice";
 import classNames from "classnames";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   deleteFavoriteTracks,
   postFavoriteTracks,
@@ -32,50 +35,78 @@ export default function Track({ track, tracksData, isFavorite }: TrackType) {
   const [isLiked, setIsLiked] = useState(isLikedByUser);
 
   const handleTrackClick = () => {
-    dispatch(setCurrentTrack({ track, tracksData }));
+    dispatch(setCurrentTrack({ track, tracksData, isPlaying: true }));
   };
 
-  const [selectedTrackData, setSelectedTrackData] = useState<any>(track);
-
-  function setLike() {
-    const newData = {
-      stared_user: user,
-    };
-    setSelectedTrackData([
-      ...selectedTrackData.stared_user,
-      newData.stared_user,
-    ]);
-    console.log(selectedTrackData);
-  }
+  useEffect(() => {
+    const isLikedByUser =
+      isFavorite || !!track.stared_user.find((arg) => arg.id === user?.id);
+    setIsLiked(isLikedByUser);
+  }, [track]);
 
   const handleLikeTrack = (e: React.MouseEvent<SVGUseElement>) => {
     e.stopPropagation();
     if (user?.email) {
       if (!isLiked) {
         postFavoriteTracks(track.id, token?.access!)
-          .then(() => {
+          .then((data) => {
+            if (data.detail === "An error has occurred") {
+              throw new Error("Лайк уже поставлен");
+            }
             setIsLiked((prev) => !prev);
-            setLike();
-
-            // обновить данные в глобальном хранилище в данном случае поле stared_user
-            // если api выдает лайк уже поставлен - throw new error
+            dispatch(
+              setCurrentTrack({ track: { ...currentTrack, isLiked: !isLiked } })
+            );
           })
           .catch((error) => {
             if (error.message === "401" && user) {
               refreshToken(token?.refresh!).then((data) => {
-                postFavoriteTracks(track.id, data.access);
+                postFavoriteTracks(track.id, data.access).then((data) => {
+                  if (data.detail === "An error has occurred") {
+                    throw new Error("Лайк уже поставлен");
+                  }
+                  setIsLiked((prev) => !prev);
+                  dispatch(
+                    setCurrentTrack({
+                      track: { ...currentTrack, isLiked: !isLiked },
+                    })
+                  );
+                });
               });
+            } else {
+              console.log(error);
             }
           });
       } else {
-        deleteFavoriteTracks(track.id, token?.access!).catch((error) => {
-          if (error.message === "401" && user) {
-            refreshToken(token?.refresh!).then((data) => {
-              deleteFavoriteTracks(track.id, data.access);
-            });
-          }
-        });
-        setIsLiked((prev) => !prev);
+        deleteFavoriteTracks(track.id, token?.access!)
+          .then((data) => {
+            if (data.detail === "An error has occurred") {
+              throw new Error("Лайк уже убран");
+            }
+            setIsLiked((prev) => !prev);
+            dispatch(
+              setCurrentTrack({ track: { ...currentTrack, isLiked: !isLiked } })
+            );
+          })
+          .catch((error) => {
+            if (error.message === "401" && user) {
+              refreshToken(token?.refresh!).then((data) => {
+                deleteFavoriteTracks(track.id, data.access).then((data) => {
+                  if (data.detail === "An error has occurred") {
+                    throw new Error("Лайк уже убран");
+                  }
+                  setIsLiked((prev) => !prev);
+                  dispatch(
+                    setCurrentTrack({
+                      track: { ...currentTrack, isLiked: !isLiked },
+                    })
+                  );
+                });
+              });
+            } else {
+              console.log(error);
+            }
+          });
       }
     } else {
       alert("Для добавления трека, пожалуйста авторизуйтесь");
