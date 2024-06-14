@@ -54,9 +54,15 @@ export default function Track({ track, tracksData, isFavorite }: TrackType) {
               throw new Error("Лайк уже поставлен");
             }
             setIsLiked((prev) => !prev);
-            dispatch(
-              setCurrentTrack({ track: { ...currentTrack, isLiked: !isLiked } })
-            );
+            if (currentTrack) {
+              dispatch(
+                setCurrentTrack({
+                  track: { ...currentTrack, isLiked: !isLiked },
+                  tracksData,
+                  isPlaying: false,
+                })
+              );
+            }
           })
           .catch((error) => {
             if (error.message === "401" && user) {
@@ -66,11 +72,15 @@ export default function Track({ track, tracksData, isFavorite }: TrackType) {
                     throw new Error("Лайк уже поставлен");
                   }
                   setIsLiked((prev) => !prev);
-                  dispatch(
-                    setCurrentTrack({
-                      track: { ...currentTrack, isLiked: !isLiked },
-                    })
-                  );
+                  if (currentTrack) {
+                    dispatch(
+                      setCurrentTrack({
+                        track: { ...currentTrack, isLiked: !isLiked },
+                        tracksData,
+                        isPlaying: false,
+                      })
+                    );
+                  }
                 });
               });
             } else {
@@ -84,9 +94,15 @@ export default function Track({ track, tracksData, isFavorite }: TrackType) {
               throw new Error("Лайк уже убран");
             }
             setIsLiked((prev) => !prev);
-            dispatch(
-              setCurrentTrack({ track: { ...currentTrack, isLiked: !isLiked } })
-            );
+            if (currentTrack) {
+              dispatch(
+                setCurrentTrack({
+                  track: { ...currentTrack, isLiked: !isLiked },
+                  tracksData,
+                  isPlaying: false,
+                })
+              );
+            }
           })
           .catch((error) => {
             if (error.message === "401" && user) {
@@ -96,11 +112,15 @@ export default function Track({ track, tracksData, isFavorite }: TrackType) {
                     throw new Error("Лайк уже убран");
                   }
                   setIsLiked((prev) => !prev);
-                  dispatch(
-                    setCurrentTrack({
-                      track: { ...currentTrack, isLiked: !isLiked },
-                    })
-                  );
+                  if (currentTrack) {
+                    dispatch(
+                      setCurrentTrack({
+                        track: { ...currentTrack, isLiked: !isLiked },
+                        tracksData,
+                        isPlaying: false,
+                      })
+                    );
+                  }
                 });
               });
             } else {
