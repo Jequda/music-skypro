@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export type userType = {
   id: number;
   username: string;
@@ -17,8 +19,26 @@ export type trackType = {
   logo: string | null;
   track_file: string;
   stared_user: userType[];
+  isFavorite: boolean;
+  isLiked: boolean;
 };
 
 export type CategoryType = {
   params: { id: string };
+};
+
+export type UserContextType = {
+  user: userType | null;
+
+  token?: TokenType;
+  login: (
+    newUser: number,
+    loginData: { email: string; password: string }
+  ) => void;
+  logout: () => void;
+};
+
+export type TokenType = {
+  access: string;
+  refresh: string;
 };

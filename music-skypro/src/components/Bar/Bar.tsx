@@ -18,7 +18,15 @@ import {
   setIsShaffle,
   nextTrack,
   prevTrack,
+  setInitialTracks,
 } from "@/store/features/PlaylistSlice";
+import { useUser } from "@/hooks/useUser";
+import {
+  deleteFavoriteTracks,
+  getTracks,
+  postFavoriteTracks,
+  refreshToken,
+} from "@/api/tracks";
 
 export default function Bar() {
   const currentTrack = useAppSelector((state) => state.playlist.currentTrack);
@@ -31,12 +39,19 @@ export default function Bar() {
   const [isLooping, setIsLooping] = useState<boolean>(false);
   const isShuffle = useAppSelector((state) => state.playlist.isShuffle);
   let duration = 0;
+  const { user, token } = useUser();
 
   if (audioRef.current?.duration) {
     duration = audioRef.current?.duration;
   }
 
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+
   const [volume, setVolume] = useState<number>(0.5); // Начальная громкость установлена на 50%
+
+  useEffect(() => {
+    setIsLiked(!!currentTrack?.isLiked);
+  }, [currentTrack]);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -104,6 +119,66 @@ export default function Bar() {
 
   const handlePrevTrack = () => {
     dispatch(prevTrack());
+  };
+
+  const handleLikeTrack = () => {
+    if (user?.email) {
+      if (!isLiked) {
+        postFavoriteTracks(currentTrack?.id!, token?.access!)
+          .then((data) => {
+            if (data.detail === "An error has occurred") {
+              throw new Error("Лайк уже поставлен");
+            }
+            getTracks({ id: user.id }).then((tracksData) => {
+              dispatch(setInitialTracks({ initialTracks: tracksData }));
+            });
+            setIsLiked(!isLiked);
+          })
+          .catch((error) => {
+            if (error.message === "401" && user) {
+              refreshToken(token?.refresh!).then((data) => {
+                postFavoriteTracks(currentTrack?.id!, data.access).then(
+                  (data) => {
+                    if (data.detail === "An error has occurred") {
+                      throw new Error("Лайк уже поставлен");
+                    }
+                  }
+                );
+              });
+            } else {
+              console.log(error);
+            }
+          });
+      } else {
+        deleteFavoriteTracks(currentTrack?.id!, token?.access!)
+          .then((data) => {
+            if (data.detail === "An error has occurred") {
+              throw new Error("Лайк уже убран");
+            }
+            getTracks({ id: user.id }).then((tracksData) => {
+              dispatch(setInitialTracks({ initialTracks: tracksData }));
+            });
+            setIsLiked(!isLiked);
+          })
+          .catch((error) => {
+            if (error.message === "401" && user) {
+              refreshToken(token?.refresh!).then((data) => {
+                deleteFavoriteTracks(currentTrack?.id!, data.access).then(
+                  (data) => {
+                    if (data.detail === "An error has occurred") {
+                      throw new Error("Лайк уже поставлен");
+                    }
+                  }
+                );
+              });
+            } else {
+              console.log(error);
+            }
+          });
+      }
+    } else {
+      alert("Для добавления трека, пожалуйста авторизуйтесь");
+    }
   };
 
   return (
@@ -196,7 +271,13 @@ export default function Bar() {
                   </div>
                   <div className={styles.trackPlayLikeDis}>
                     <div className={styles.trackPlayLike}>
-                      <svg className={styles.trackPlayLikeSvg}>
+                      <svg
+                        onClick={handleLikeTrack}
+                        className={classNames(
+                          styles.trackPlayLikeSvg,
+                          isLiked ? styles.activeLike : null
+                        )}
+                      >
                         <use xlinkHref="/img/icon/sprite.svg#icon-like" />
                       </svg>
                     </div>

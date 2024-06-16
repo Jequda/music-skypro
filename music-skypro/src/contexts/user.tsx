@@ -1,6 +1,7 @@
 "use client";
 
 import { getToken } from "@/api/tracks";
+import { UserContextType } from "@/types";
 import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, createContext, useState } from "react";
 
@@ -13,20 +14,34 @@ function getUserFromLocalStorage() {
   }
 }
 
-type UserContextType = {
-  user: any;
-  login: (newUser: any, loginData: any) => void;
-  logout: () => void;
+function getTokenFromLocalStorage() {
+  try {
+    return JSON.parse(localStorage.getItem("token") || "{}");
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+const initialValue: UserContextType = {
+  user: null,
+  login: (param, data) => {},
+  logout: () => {},
 };
 
-export const UserContext = createContext<UserContextType | null>(null);
+export const UserContext = createContext<UserContextType>(initialValue);
 export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const [user, setUser] = useState(getUserFromLocalStorage());
-  function login(newUser: any, loginData: any) {
+  const [token, setToken] = useState(getTokenFromLocalStorage());
+  function login(
+    newUser: number,
+    loginData: { email: string; password: string }
+  ) {
     setUser(newUser);
     localStorage.setItem("user", JSON.stringify(newUser));
     getToken(loginData).then((tokenData) => {
+      setToken(tokenData);
       localStorage.setItem("token", JSON.stringify(tokenData));
       router.push("/");
     });
@@ -34,10 +49,11 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
   function logout() {
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
   }
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, token, login, logout }}>
       {children}
     </UserContext.Provider>
   );

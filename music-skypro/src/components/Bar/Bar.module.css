@@ -272,6 +272,10 @@
   stroke: #696969;
 }
 
+.trackPlayLikeSvg:hover {
+  fill: gray;
+}
+
 .trackPlayDislike {
   margin-left: 28.5px;
 }
@@ -374,4 +378,8 @@
 .volumeProgressLine::-moz-range-progress {
   background-color: var(--progress-color);
   height: var(--progress-height);
+}
+
+.activeLike {
+  fill: #b672ff;
 }
